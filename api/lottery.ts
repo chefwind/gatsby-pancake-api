@@ -2,6 +2,7 @@ import { NowRequest, NowResponse, NowRequestQuery } from "@vercel/node";
 import { getContract } from "../lib/contract";
 import { PromisifyBatchRequest } from "../lib/PromiseBatchRequest";
 const lotteryABI = require("../contracts/lottery");
+
 interface SingleLotteryReturn {
   numbers1: Promise<[string, string, string, string]>;
   numbers2: Promise<[string, string, string, string]>;
