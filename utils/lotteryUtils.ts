@@ -8,10 +8,26 @@ export interface SingleLotteryReturn {
   numbers2: Promise<[string, string, string, string]>;
   index: number;
 }
+
 export interface Lottery {
   numbers1: [string, string, string, string];
   numbers2: Array<number>;
   issueIndex: number;
+}
+
+export interface SingleLottery {
+  lotteryNumber: number;
+  lotteryDate: Date;
+  poolSize: number;
+  lotteryNumbers: number[];
+  jackpotTicket: number;
+  match3Ticket: number;
+  match2Ticket: number;
+  poolJackpot: number;
+  poolMatch3: number;
+  poolMatch2: number;
+  burned: number;
+  contractLink: string;
 }
 
 export interface LotteryHistory {
