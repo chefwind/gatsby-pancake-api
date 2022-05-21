@@ -1,5 +1,13 @@
 import { NowRequest, NowResponse } from "@vercel/node";
-import { getBurnedSupply, getTotalSupply } from "../utils/supply";
+import {
+  getBurnedSupply,
+  getLockedCake,
+  getTotalSupply,
+  planetFinanceBurnedTokensWei,
+  maxSupply,
+} from "../utils/supply";
+import formatNumber from "../utils/formatNumber";
+import BigNumber from "bignumber.js";
 
 export default async (req: NowRequest, res: NowResponse): Promise<void> => {
   let totalSupply = await getTotalSupply();
@@ -8,11 +16,33 @@ export default async (req: NowRequest, res: NowResponse): Promise<void> => {
   let burnedSupply = await getBurnedSupply();
   burnedSupply = burnedSupply.div(1e18);
 
-  const circulatingSupply = totalSupply.minus(burnedSupply);
+  let lockedCake = await getLockedCake();
+  lockedCake = lockedCake.div(1e18);
 
-  res.json({
-    totalSupply: totalSupply.toNumber(),
-    burnedSupply: burnedSupply.toNumber(),
-    circulatingSupply: circulatingSupply.toNumber(),
-  });
+  const planetFinanceBurnedTokens = planetFinanceBurnedTokensWei.div(1e18);
+
+  const totalBurnedTokens = burnedSupply.plus(planetFinanceBurnedTokens);
+
+  const burnedAndLockedTokens = totalBurnedTokens.plus(lockedCake);
+
+  const unburntCake = totalSupply.minus(totalBurnedTokens);
+
+  const circulatingSupply = totalSupply.minus(burnedAndLockedTokens);
+
+  if (req.query?.verbose) {
+    res.json({
+      totalMinted: formatNumber(totalSupply.toNumber()),
+      totalSupply: formatNumber(unburntCake.toNumber()),
+      burnedSupply: formatNumber(burnedSupply.toNumber()),
+      circulatingSupply: formatNumber(circulatingSupply.toNumber()),
+      lockedCake: formatNumber(lockedCake.toNumber()),
+      maxSupply: formatNumber(maxSupply),
+    });
+  } else {
+    res.json({
+      totalSupply: unburntCake.toNumber(),
+      burnedSupply: totalBurnedTokens.toNumber(),
+      circulatingSupply: circulatingSupply.toNumber(),
+    });
+  }
 };

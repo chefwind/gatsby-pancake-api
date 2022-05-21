@@ -15,3 +15,5 @@ export const MULTICALL_CONTRACT = "0x1Ee38d535d541c55C9dae27B12edf090C608E6Fb";
 export const CAKE_TOKEN = new Token(ChainId.MAINNET, CAKE, 18);
 export const WBNB_TOKEN = new Token(ChainId.MAINNET, WBNB, 18);
 export const CAKE_BNB_TOKEN = new Token(ChainId.MAINNET, CAKE_BNB_FARM, 18);
+
+export const LOCKED_CAKE_POOL = "0x45c54210128a065de780C4B0Df3d16664f7f859e";
