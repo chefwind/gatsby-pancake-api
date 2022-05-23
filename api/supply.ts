@@ -29,7 +29,11 @@ export default async (req: NowRequest, res: NowResponse): Promise<void> => {
 
   const circulatingSupply = totalSupply.minus(burnedAndLockedTokens);
 
-  if (req.query?.verbose) {
+  if (req.query?.q === "totalSupply") {
+    res.json(unburntCake.toNumber());
+  } else if (req.query?.q === "circulatingSupply") {
+    res.json(circulatingSupply.toNumber());
+  } else if (req.query?.verbose) {
     res.json({
       totalMinted: formatNumber(totalSupply.toNumber()),
       totalSupply: formatNumber(unburntCake.toNumber()),
